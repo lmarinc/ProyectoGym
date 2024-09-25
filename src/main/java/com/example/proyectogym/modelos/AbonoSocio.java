@@ -4,16 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
-@Table(name = "abonosocio",schema = "Gym", catalog = "postgres")
+@Table(name = "abonosocio",schema = "gym", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"socio", "abono"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"socio", "abono"})
 
 
 public class AbonoSocio {
@@ -25,7 +24,7 @@ public class AbonoSocio {
 
     @ManyToOne
     @JoinColumn(name = "id_socio", nullable = false)
-    private Socios socio;
+    private Socio socio;
 
     @ManyToOne
     @JoinColumn(name = "id_abono", nullable = false)

@@ -5,17 +5,15 @@ import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
-@Table(name = "asistencia",schema = "Gym", catalog = "postgres")
+@Table(name = "asistencia",schema = "gym", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"socio"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"socio"})
 
 public class Asistencia {
     @Id
@@ -34,5 +32,5 @@ public class Asistencia {
 
     @ManyToOne
     @JoinColumn(name = "id_socio", nullable = false)
-    private Socios socio;
+    private Socio socio;
 }

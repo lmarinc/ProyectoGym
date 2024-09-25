@@ -3,18 +3,15 @@ package com.example.proyectogym.modelos;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Entity
-@Table(name = "socios",schema = "Gym", catalog = "postgres")
+@Table(name = "socio",schema = "gym", catalog = "postgres")
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-
-public class Socios {
+public class Socio {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

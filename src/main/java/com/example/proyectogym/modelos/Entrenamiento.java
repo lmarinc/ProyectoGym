@@ -6,15 +6,15 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "entrenamientos",schema = "Gym", catalog = "postgres")
+@Table(name = "entrenamiento",schema = "gym", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"monitor"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"monitor"})
 
-public class Entrenamientos {
+public class Entrenamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false   )

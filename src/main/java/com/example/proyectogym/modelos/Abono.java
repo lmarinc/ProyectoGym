@@ -1,10 +1,11 @@
 package com.example.proyectogym.modelos;
 
+import com.example.proyectogym.enumerados.TipoAbono;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "abono",schema = "Gym", catalog = "postgres")
+@Table(name = "abono",schema = "gym", catalog = "postgres")
 @Getter
 @Setter
 @ToString
@@ -26,7 +27,8 @@ public class Abono {
         private String descripcion;
 
         @Column(name ="duracion")
-        private Integer duracion;
+        @Enumerated(EnumType.ORDINAL)
+        private TipoAbono duracion;
 
         @Column(name = "precio")
         private Double precio;
