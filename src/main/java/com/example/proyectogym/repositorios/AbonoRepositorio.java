@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface AbonoRepositorio extends JpaRepository<Abono,Integer> {
 
-    List<Abono> findAllByDuracionEquals(TipoAbono duracion);
+    List<Abono> findAllByTipoAbonoEquals(TipoAbono tipoAbono);
+
+
+
 }

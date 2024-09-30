@@ -26,9 +26,12 @@ public class Abono {
         @Column(name = "descripcion")
         private String descripcion;
 
-        @Column(name ="duracion")
+        @Column(name ="tipo_abono")
         @Enumerated(EnumType.ORDINAL)
-        private TipoAbono duracion;
+        private TipoAbono tipoAbono;
+
+        @Column(name = "duracion")
+        private Integer duracion;
 
         @Column(name = "precio")
         private Double precio;
