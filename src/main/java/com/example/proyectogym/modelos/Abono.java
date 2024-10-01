@@ -4,6 +4,8 @@ import com.example.proyectogym.enumerados.TipoAbono;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "abono",schema = "gym", catalog = "postgres")
 @Getter
@@ -35,4 +37,7 @@ public class Abono {
 
         @Column(name = "precio")
         private Double precio;
+
+//        @OneToMany(mappedBy = "abono", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+//        private List<AbonoSocio> abonoSocios;
 }

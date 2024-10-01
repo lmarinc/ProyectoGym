@@ -13,6 +13,8 @@ public interface AbonoRepositorio extends JpaRepository<Abono,Integer> {
 
     List<Abono> findAllByTipoAbonoEquals(TipoAbono tipoAbono);
 
+    Abono findAbonoByTipoAbonoEquals (TipoAbono tipoAbono);
+
 
 
 }

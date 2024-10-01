@@ -22,11 +22,11 @@ public class AbonoSocio {
     @Column(name = "id", nullable = false   )
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_socio", nullable = false)
     private Socio socio;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_abono", nullable = false)
     private Abono abono;
 

@@ -7,9 +7,11 @@ import com.example.proyectogym.modelos.Socio;
 import com.example.proyectogym.servicios.AbonoService;
 import com.example.proyectogym.servicios.AbonoSocioService;
 import com.example.proyectogym.servicios.SocioService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDate;
 
@@ -28,24 +30,28 @@ public class AbonoSocioTest {
     private AbonoService abonoService;
 
     @Test
+    @Transactional
+    @Commit
     void testCrearAbonoSocio() {
-        // Crear instancias de Socio y Abono
+        // Crear instancias de Socio
         Socio socio = new Socio();
-        socio.setNombre("Juan");
-        socio.setApellidos("Pérez");
-        socio.setDni("12345678A");
-        socio.setTelefono("123456789");
-        socio.setCorreo("juan.perez@example.com");
+        socio.setNombre("Felipe");
+        socio.setApellidos("Marin");
+        socio.setDni("98746541");
+        socio.setTelefono("999888777");
+        socio.setCorreo("felipe.marin@example.com");
         socio.setEsActivo(true);
-        socio = socioService.save(socio);
+        socio = socioService.guardar(socio);
 
-        Abono abono = new Abono();
-        abono.setNombre("Mensual");
-        abono.setDescripcion("Abono mensual");
-        abono.setTipoAbono(TipoAbono.MENSUAL);
-        abono.setDuracion(30);
-        abono.setPrecio(50.0);
-        abono = abonoService.save(abono);
+        // Buscar el abono existente por ID o algún otro campo (por ejemplo, nombre)
+        Abono abono = abonoService.getAbonoPorNombre(TipoAbono.MENSUAL);
+
+        if (abono == null) {
+            throw new IllegalStateException("No se encontró el abono con nombre 'Mensual'.");
+        }
+
+        // Asegurarse de que el abono esté gestionado
+//        abono = abonoService.merge(abono); // Si está "detached", se vuelve a conectar con el EntityManager.
 
         // Crear instancia de AbonoSocio
         AbonoSocio abonoSocio = new AbonoSocio();
@@ -56,10 +62,11 @@ public class AbonoSocioTest {
         abonoSocio.setPrecio(50.0);
 
         // Guardar AbonoSocio
-        AbonoSocio savedAbonoSocio = abonoSocioService.save(abonoSocio);
+        AbonoSocio savedAbonoSocio = abonoSocioService.guardar(abonoSocio);
 
         // Verificar que la instancia fue guardada correctamente
         assertNotNull(savedAbonoSocio);
         assertNotNull(savedAbonoSocio.getId());
     }
+
 }

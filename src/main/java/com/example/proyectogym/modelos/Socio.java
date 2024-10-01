@@ -3,6 +3,8 @@ package com.example.proyectogym.modelos;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "socio",schema = "gym", catalog = "postgres")
 @Getter
@@ -35,6 +37,9 @@ public class Socio {
 
         @Column(name = "es_activo" , columnDefinition = "boolean default true")
         private Boolean esActivo;
+
+        @OneToMany(mappedBy = "socio", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+        private List<AbonoSocio> abonoSocios;
 
 
 }

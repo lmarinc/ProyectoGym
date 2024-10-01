@@ -4,6 +4,8 @@ package com.example.proyectogym.servicios;
 import com.example.proyectogym.enumerados.TipoAbono;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.repositorios.AbonoRepositorio;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AbonoService {
 
-
+//    @PersistenceContext
+//    private EntityManager entityManager;
     private AbonoRepositorio abonoRepositorio;
 
     /**
@@ -32,6 +35,11 @@ public class AbonoService {
         Abono abono = abonoRepositorio.findById(id).orElse(null);
         return abono;
 
+    }
+
+    public Abono getAbonoPorNombre(TipoAbono tipoAbono){
+        Abono abono = abonoRepositorio.findAbonoByTipoAbonoEquals(tipoAbono);
+        return abono;
     }
     /**
      * Método que devuelve una lista de todos los abonos
@@ -57,5 +65,9 @@ public class AbonoService {
     public void eliminar(Abono abono) {
         abonoRepositorio.delete(abono);
     }
+
+//    public Abono merge(Abono abono) {
+//        return entityManager.merge(abono); // Conecta una entidad detached de nuevo al contexto de persistencia
+//    }
 
 }
