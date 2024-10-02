@@ -17,8 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AbonoService {
 
-//    @PersistenceContext
-//    private EntityManager entityManager;
+
     private AbonoRepositorio abonoRepositorio;
 
     /**
@@ -31,12 +30,22 @@ public class AbonoService {
         return abonos;
 
     }
+
+    /**
+     * Método para buscar un abono por su id
+     * @param id
+     * @return
+     */
     public Abono getAbonoPorId(Integer id){
         Abono abono = abonoRepositorio.findById(id).orElse(null);
         return abono;
 
     }
-
+    /**
+     * Método para buscar un abono por su nombre
+     * @param tipoAbono
+     * @return
+     */
     public Abono getAbonoPorNombre(TipoAbono tipoAbono){
         Abono abono = abonoRepositorio.findAbonoByTipoAbonoEquals(tipoAbono);
         return abono;
@@ -66,8 +75,6 @@ public class AbonoService {
         abonoRepositorio.delete(abono);
     }
 
-//    public Abono merge(Abono abono) {
-//        return entityManager.merge(abono); // Conecta una entidad detached de nuevo al contexto de persistencia
-//    }
+
 
 }

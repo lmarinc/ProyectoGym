@@ -3,6 +3,7 @@ package com.example.proyectogym.modelos;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,6 +34,7 @@ public class Monitor {
     @Column(name = "salario" , nullable = false)
     private Double salario;
 
-//    @OneToMany(targetEntity = Entrenamientos.class, mappedBy = "monitor", fetch = FetchType.LAZY)
-//    private Set<Entrenamientos> entrenamientos;
+//    @OneToMany(mappedBy = "monitor", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+//    private List<Entrenamiento> entrenamientos;
+
 }
