@@ -27,8 +27,19 @@ public class SocioService {
      * @param socio
      */
 
-    public void eliminar(Socio socio) {
-        socioRepositorio.delete(socio);
+    public String eliminarPorId(Integer id) {
+        Socio socio = socioRepositorio.findById(id).orElse(null);
+
+        if (socio == null) {
+            return "Socio no encontrado";
+        }
+
+        try {
+            socioRepositorio.delete(socio);
+            return "Socio eliminado";
+        } catch (Exception e) {
+            return "Error al eliminar el socio";
+        }
     }
 
     /**

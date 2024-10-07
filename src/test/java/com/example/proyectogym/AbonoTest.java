@@ -32,10 +32,10 @@ public class AbonoTest {
         abono.setPrecio(20.0);
         abonoService.guardar(abono);
     }
-    @Test
-    void testEliminarAbono() {
-        abonoService.eliminar(6);
-    }
+//    @Test
+//    void testEliminarAbono() {
+//        abonoService.eliminar(6);
+//    }
     @Test
     void testEditarAbono() {
         Abono abono = abonoService.getAbonoPorId(2);

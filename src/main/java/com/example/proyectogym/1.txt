@@ -1,0 +1,30 @@
+a) Planificación y análisis de requisitos
+Implica definir qué necesita el cliente y cuál será el alcance del proyecto. Es importante porque asegura que todos los involucrados tengan una visión clara de lo que se va a desarrollar.
+b) Definición de requisitos
+Consiste en formalizar los requerimientos obtenidos en la fase anterior, especificando de manera detallada qué debe hacer el sistema. Es crucial porque sirve de base para las siguientes fases y evita malentendidos.
+c) Diseño de la arquitectura
+Se define cómo se estructurará el software, incluyendo los componentes y su interacción. Es importante porque una buena arquitectura garantiza que el sistema sea escalable, mantenible y eficiente.
+d) Implementación de la solución
+Es la fase en la que se codifica el software según el diseño establecido. Es fundamental porque aquí es donde el proyecto toma forma y se materializan los requisitos definidos.
+e) Pruebas
+Se verifica que el software funcione correctamente y cumpla con los requisitos. Es esencial para detectar y corregir errores, asegurando que el producto sea confiable y cumpla su propósito.
+f) Mantenimiento
+Consiste en realizar mejoras, correcciones y actualizaciones después de la entrega. Es importante porque garantiza que el software siga siendo útil y eficiente a lo largo del tiempo.
+
+Arquitectura 3 niveles vs MVC
+
+La arquitectura de 3 niveles y el patrón MVC (Modelo-Vista-Controlador) son dos enfoques comunes para estructurar aplicaciones de software. A continuación se describen brevemente ambos enfoques:
+
+Arquitectura de 3 niveles:
+- Capa de presentación: Interfaz de usuario que interactúa con el usuario final.
+- Capa de lógica de negocio: Contiene la lógica de la aplicación y procesa los datos.
+- Capa de acceso a datos: Se encarga de la interacción con la base de datos y la persistencia de los datos.
+
+MVC (Modelo-Vista-Controlador):
+- Modelo: Representa los datos y la lógica de la aplicación.
+- Vista: Interfaz de usuario que muestra los datos al usuario.
+- Controlador: Gestiona las interacciones del usuario y actualiza el modelo y la vista en consecuencia.
+
+Ambos enfoques tienen sus ventajas y desventajas, y la elección entre ellos dependerá de las necesidades y requisitos específicos del proyecto. La arquitectura de 3 niveles es más genérica y flexible, mientras que MVC es más específico y estructurado. En general, MVC es más adecuado para aplicaciones web y móviles, mientras que la arquitectura de 3 niveles es más común en aplicaciones empresariales y de escritorio.
+
+En resumen, la arquitectura de 3 niveles y el patrón MVC son dos enfoques comunes para estructurar aplicaciones de software, cada uno con sus propias características y aplicaciones específicas. La elección entre ellos dependerá de las necesidades y requisitos del proyecto en cuestión.

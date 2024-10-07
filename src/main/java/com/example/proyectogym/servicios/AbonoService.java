@@ -3,6 +3,7 @@ package com.example.proyectogym.servicios;
 
 import com.example.proyectogym.enumerados.TipoAbono;
 import com.example.proyectogym.modelos.Abono;
+import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.repositorios.AbonoRepositorio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -68,8 +69,19 @@ public class AbonoService {
     /**
      * Metodo para eliminar un abono
      */
-    public void eliminar(Integer id) {
-        abonoRepositorio.deleteById(id);
+    public String eliminarPorId(Integer id) {
+        Abono abono = abonoRepositorio.findById(id).orElse(null);
+
+        if (abono == null) {
+            return "Abono no encontrado";
+        }
+
+        try {
+            abonoRepositorio.delete(abono);
+            return "Abono eliminado";
+        } catch (Exception e) {
+            return "Error al eliminar el abono";
+        }
     }
     public void eliminar(Abono abono) {
         abonoRepositorio.delete(abono);
