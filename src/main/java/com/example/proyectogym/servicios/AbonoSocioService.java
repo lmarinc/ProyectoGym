@@ -20,7 +20,8 @@ public class AbonoSocioService {
      */
 
     public AbonoSocio getAbonoSocioPorId(Integer id){
-        return abonoSocioRepositorio.findById(id).orElse(null);
+        return abonoSocioRepositorio.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("AbonoSocio no encontrado con id: " + id));
     }
 
     /**
@@ -28,11 +29,11 @@ public class AbonoSocioService {
      * @param abonoSocio
      * @return
      */
-
-
     public AbonoSocio guardar(AbonoSocio abonoSocio) {
         return abonoSocioRepositorio.save(abonoSocio);
     }
+
+
     /**
      * Método para eliminar un abono
      * @param id
@@ -41,13 +42,7 @@ public class AbonoSocioService {
         abonoSocioRepositorio.deleteById(id);
     }
 
-    /**
-     * Método para eliminar un abono
-     * @param abonoSocio
-     */
-    public void eliminar(AbonoSocio abonoSocio) {
-        abonoSocioRepositorio.delete(abonoSocio);
-    }
+
 
     /**
      * Método que devuelve una lista de todos los abonos
