@@ -1,5 +1,6 @@
 package com.example.proyectogym.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,7 +35,11 @@ public class Monitor {
     @Column(name = "salario" , nullable = false)
     private Double salario;
 
-//    @OneToMany(mappedBy = "monitor", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @Column (name = "foto" , nullable = true)
+    private String foto;
+
+//    @OneToMany(mappedBy = "monitor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonIgnore
 //    private List<Entrenamiento> entrenamientos;
 
 }

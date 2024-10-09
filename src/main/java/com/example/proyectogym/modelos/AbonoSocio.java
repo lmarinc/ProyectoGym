@@ -1,5 +1,6 @@
 package com.example.proyectogym.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class AbonoSocio {
     @Column(name = "id", nullable = false   )
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_socio", nullable = false)
     private Socio socio;

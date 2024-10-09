@@ -1,6 +1,8 @@
 package com.example.proyectogym.controladores;
 
+import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
 import com.example.proyectogym.modelos.Abono;
+import com.example.proyectogym.modelos.AbonoSocio;
 import com.example.proyectogym.servicios.AbonoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,11 @@ public class AbonoController {
     @DeleteMapping()
     public String eliminar(@RequestParam Integer id) {
         return abonoService.eliminarPorId(id);
+    }
+
+    @PostMapping("/renovar")
+    public AbonoSocio renovarAbono(@RequestBody RenovarAbonoSocioDTO dto) {
+        return abonoService.renovarAbono(dto);
     }
 
 }

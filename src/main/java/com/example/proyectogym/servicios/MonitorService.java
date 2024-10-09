@@ -1,5 +1,6 @@
 package com.example.proyectogym.servicios;
 
+import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.Monitor;
 import com.example.proyectogym.repositorios.MonitorRepositorio;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,22 @@ public class MonitorService {
     }
 
     /**
-     * Método para eliminar un monitor
-     * @param monitor
+     * Método para eliminar un monitor por su id
+     * @param id
      */
-    public void eliminar(Monitor monitor) {
-        monitorRepositorio.delete(monitor);
+    public String eliminarPorId(Integer id) {
+        Monitor monitor = monitorRepositorio.findById(id).orElse(null);
+
+        if (monitor == null) {
+            return "Monitor no encontrado";
+        }
+
+        try {
+            monitorRepositorio.delete(monitor);
+            return "Monitor eliminado";
+        } catch (Exception e) {
+            return "Error al eliminar el monitor";
+        }
     }
 
     /**

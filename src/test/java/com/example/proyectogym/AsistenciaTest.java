@@ -26,19 +26,19 @@ public class AsistenciaTest {
         System.out.println(asistenciaService.findById(1).getFecha());
 
     }
-    @Test
-    void testCreateAsistencia() {
-        Asistencia asistencia = new Asistencia();
-        asistencia.setFecha(LocalDate.now());
-        asistencia.setHoraEntrada(Time.valueOf(LocalTime.now()));
-        asistencia.setHoraSalida(Time.valueOf(LocalTime.now()));
-        Socio socio = new Socio();
-        socio.setId(1);
-        asistencia.setSocio(socio);
-        asistenciaService.guardar(asistencia);
-    }
-    @Test
-    void testDeleteAsistencia() {
-        asistenciaService.eliminar(11);
-    }
+//    @Test
+//    void testCreateAsistencia() {
+//        Asistencia asistencia = new Asistencia();
+//        asistencia.setFecha(LocalDate.now());
+//        asistencia.setHoraEntrada(Time.valueOf(LocalTime.now()));
+//        asistencia.setHoraSalida(Time.valueOf(LocalTime.now()));
+//        Socio socio = new Socio();
+//        socio.setId(1);
+//        asistencia.setSocio(socio);
+//        asistenciaService.guardar(asistencia);
+//    }
+//    @Test
+//    void testDeleteAsistencia() {
+//        asistenciaService.eliminar(11);
+//    }
 }

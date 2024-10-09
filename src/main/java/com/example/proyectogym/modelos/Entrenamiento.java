@@ -1,5 +1,6 @@
 package com.example.proyectogym.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +39,8 @@ public class Entrenamiento {
     @Column (name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "id_monitor", nullable = false)
     private Monitor monitor;
 }
+

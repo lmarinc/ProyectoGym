@@ -1,5 +1,6 @@
 package com.example.proyectogym.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +31,8 @@ public class Asistencia {
     @Column(name = "hora_salida")
     private Time horaSalida;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_socio", nullable = false)
+    @JsonIgnore
     private Socio socio;
 }

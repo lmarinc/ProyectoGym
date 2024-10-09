@@ -1,10 +1,15 @@
 package com.example.proyectogym.servicios;
 
 
+import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
 import com.example.proyectogym.enumerados.TipoAbono;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.Abono;
+import com.example.proyectogym.modelos.AbonoSocio;
+import com.example.proyectogym.modelos.Socio;
 import com.example.proyectogym.repositorios.AbonoRepositorio;
+import com.example.proyectogym.repositorios.AbonoSocioRepositorio;
+import com.example.proyectogym.repositorios.SocioRepositorio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
@@ -12,6 +17,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,10 +25,13 @@ import java.util.List;
 public class AbonoService {
 
 
+    private final AbonoSocioService abonoSocioService;
     private AbonoRepositorio abonoRepositorio;
+    private AbonoSocioRepositorio abonoSocioRepositorio;
+    private SocioRepositorio socioRepositorio;
 
     /**
-     * Método que devuelve una lista de abonos por duración
+     * Método que devuelve una lista de abonos por tipo
      * @param tipoAbono
      * @return
      */
@@ -83,8 +92,48 @@ public class AbonoService {
             return "Error al eliminar el abono";
         }
     }
-    public void eliminar(Abono abono) {
-        abonoRepositorio.delete(abono);
+
+    /**
+     * Método para renovar un abono
+     * @param dto
+     * @return
+     */
+
+    public AbonoSocio renovarAbono(RenovarAbonoSocioDTO dto) {
+        // Obtener el socio por ID
+        Socio socio = socioRepositorio.findById(dto.getIdSocio())
+                .orElseThrow(() -> new IllegalArgumentException("Socio no encontrado con ID: " + dto.getIdSocio()));
+
+        // Obtener el abono por ID
+        Abono abono = abonoRepositorio.findById(dto.getIdAbono())
+                .orElseThrow(() -> new IllegalArgumentException("Abono no encontrado con ID: " + dto.getIdAbono()));
+
+        // Determinar la fecha de inicio
+        LocalDate fechaInicio;
+        List<AbonoSocio> abonosPrevios = socio.getAbonoSocios();
+
+        if (abonosPrevios == null || abonosPrevios.isEmpty()) {
+            // Si no hay registros previos, usar la fecha de hoy
+            fechaInicio = LocalDate.now();
+        } else {
+            // Si hay registros previos, tomar la fecha de fin del último registro
+            LocalDate fechaFinUltimo = abonosPrevios.get(abonosPrevios.size() - 1).getFechaFin();
+            fechaInicio = fechaFinUltimo;
+        }
+
+        // Calcular la fecha de fin basada en la duración del abono
+        LocalDate fechaFin = fechaInicio.plusDays(abono.getDuracion());
+
+        // Crear el nuevo registro de AbonoSocio
+        AbonoSocio nuevoAbonoSocio = new AbonoSocio();
+        nuevoAbonoSocio.setSocio(socio);
+        nuevoAbonoSocio.setAbono(abono);
+        nuevoAbonoSocio.setFechaInicio(fechaInicio);
+        nuevoAbonoSocio.setFechaFin(fechaFin);
+        nuevoAbonoSocio.setPrecio(abono.getPrecio());  //
+
+        // Guardar el nuevo AbonoSocio
+        return abonoSocioService.guardar(nuevoAbonoSocio);
     }
 
 

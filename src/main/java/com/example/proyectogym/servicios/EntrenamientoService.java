@@ -1,6 +1,7 @@
 package com.example.proyectogym.servicios;
 
 import com.example.proyectogym.modelos.Entrenamiento;
+import com.example.proyectogym.modelos.Monitor;
 import com.example.proyectogym.repositorios.EntrenamientoRepositorio;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,19 @@ public class EntrenamientoService {
 
     }
 
-    /**
-     * Método para eliminar un entrenamiento por su id
-     * @param id
-     */
-    public void eliminar(Integer id) {
-        entrenamientoRepositorio.deleteById(id);
-    }
+    public String eliminarPorId(Integer id) {
+        Entrenamiento entrenamiento = entrenamientoRepositorio.findById(id).orElse(null);
 
-    /**
-     * Método para eliminar un entrenamiento
-     * @param entrenamiento
-     */
+        if (entrenamiento == null) {
+            return "Entrenamiento no encontrado";
+        }
 
-    public void eliminar(Entrenamiento entrenamiento) {
-        entrenamientoRepositorio.delete(entrenamiento);
+        try {
+            entrenamientoRepositorio.delete(entrenamiento);
+            return "Entrenamiento eliminado";
+        } catch (Exception e) {
+            return "Error al eliminar el entrenamiento";
+        }
     }
 
     /**
