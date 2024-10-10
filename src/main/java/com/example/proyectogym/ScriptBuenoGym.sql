@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS Socio (
     dni CHAR(8) NOT NULL,
     telefono VARCHAR(20),
     correo VARCHAR(100),
+    foto VARCHAR(500),
     es_activo BOOLEAN DEFAULT TRUE
 );
 
@@ -44,6 +45,7 @@ CREATE TABLE IF NOT EXISTS Monitor (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     dni VARCHAR(20) NOT NULL,
+    foto VARCHAR(500),
     salario DECIMAL(10, 2) NOT NULL
 );
 
