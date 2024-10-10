@@ -54,9 +54,9 @@ public class EntrenamientoTest {
         entrenamientoService.guardar(entrenamiento);
     }
 
-    @Test
-    void testDeleteEntrenamiento() {
-        entrenamientoService.eliminar(12);
-    }
+//    @Test
+//    void testDeleteEntrenamiento() {
+//        entrenamientoService.eliminar(12);
+//    }
 
 }

@@ -23,13 +23,15 @@ public class AbonoSocio {
     @Column(name = "id", nullable = false   )
     private Integer id;
 
-    @JsonIgnore
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_socio", nullable = false)
+    @JsonIgnore
     private Socio socio;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_abono", nullable = false)
+    @JsonIgnore
     private Abono abono;
 
     @Column(name = "fecha_inicio", nullable = false)

@@ -1,5 +1,6 @@
 package com.example.proyectogym.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,9 +42,11 @@ public class Socio {
         private Boolean esActivo = true;
 
         @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JsonIgnore
         private List<AbonoSocio> abonoSocios = new ArrayList<>();
 
         @OneToMany(mappedBy = "socio",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         @JsonManagedReference
+        @JsonIgnore
         private List<Asistencia> asistencias;
 }
