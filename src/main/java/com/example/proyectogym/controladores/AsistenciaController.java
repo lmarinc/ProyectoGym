@@ -40,4 +40,6 @@ public class AsistenciaController {
     public String salidaAsistencia(@RequestBody AsistenciaDto asistenciaDto) {
         return asistenciaService.salidaAsistencia(asistenciaDto);
     }
+
+
 }

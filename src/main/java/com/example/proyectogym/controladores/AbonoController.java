@@ -15,7 +15,7 @@ public class AbonoController {
     @Autowired
     private AbonoService abonoService;
 
-    @GetMapping("/listar")
+    @GetMapping("/bonos")
     public List<Abono> getAllAbonos() {
         List<Abono> abonos = abonoService.getAll();
 

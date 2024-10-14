@@ -1,6 +1,7 @@
 package com.example.proyectogym.controladores;
 
 
+import com.example.proyectogym.dto.AsistenciaDto;
 import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
 import com.example.proyectogym.dto.RenovarAbonoVigenteDTO;
 import com.example.proyectogym.dto.SocioAbonoDTO;
@@ -10,6 +11,7 @@ import com.example.proyectogym.modelos.Socio;
 import com.example.proyectogym.repositorios.AbonoRepositorio;
 import com.example.proyectogym.servicios.AbonoService;
 import com.example.proyectogym.servicios.AbonoSocioService;
+import com.example.proyectogym.servicios.AsistenciaService;
 import com.example.proyectogym.servicios.SocioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,9 @@ public class SocioController {
     @Autowired
     private AbonoSocioService abonoSocioService;
 
+    @Autowired
+    private AsistenciaService asistenciaService;
+
 
 
     @GetMapping("/listar")
@@ -54,13 +59,13 @@ public class SocioController {
         return socio;
     }
 
-    @PostMapping()
+    @PostMapping("/editar")
     public Socio guardar(@RequestBody Socio socio) {
         Socio socioGuardado = socioService.guardar(socio);
         return socioGuardado;
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/eliminar")
     public String eliminar(@RequestParam Integer id) {
         return socioService.eliminarPorId(id);
     }
@@ -71,11 +76,34 @@ public class SocioController {
     }
 
     @PostMapping("/abono/renovar")
-    public AbonoSocio renovarAbono(@RequestBody RenovarAbonoVigenteDTO dto) {
-        return abonoService.renovarAbonoVigente(dto);
+    public Object renovarAbono(@RequestParam Integer idSocio) {
+        // Crear el DTO a partir del parámetro
+        RenovarAbonoVigenteDTO dto = new RenovarAbonoVigenteDTO();
+        dto.setIdSocio(idSocio);
+
+        AbonoSocio nuevoAbonoSocio = abonoService.renovarAbonoVigente(dto);
+
+        if (nuevoAbonoSocio == null) {
+            // Retornar un mensaje de error como String
+            return "Error: El socio con ID " + idSocio + " no tiene abonos previos o no se pudo renovar el abono.";
+        }
+
+        // Si el abono fue renovado correctamente, retornamos el objeto AbonoSocio
+        return nuevoAbonoSocio;
     }
 
 
+    @GetMapping("/asistencia")
+    public String registrarAsistencia(@RequestParam Integer socioId) {
+        AsistenciaDto dto = new AsistenciaDto();
+        dto.setSocioId(socioId);
+        return asistenciaService.totalAsistencia(dto);
+    }
+
+    @GetMapping("gasto")
+    public String totalGasto(@RequestParam Integer socioId) {
+        return socioService.totalGasto(socioId);
+    }
 
 
 }

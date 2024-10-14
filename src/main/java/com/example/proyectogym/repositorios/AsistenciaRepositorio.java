@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,4 +31,6 @@ public interface AsistenciaRepositorio extends JpaRepository<Asistencia,Integer>
     Asistencia findLastEntradaWithoutSalida(@Param("socioId") Integer socioId);
 
     boolean existsBySocioIdAndHoraSalidaIsNull(Integer socioId);
+
+    List<Asistencia> findBySocioIdAndHoraSalidaIsNotNull(Integer socioId);
 }

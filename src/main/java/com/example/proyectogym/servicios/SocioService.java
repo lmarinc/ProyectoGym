@@ -33,13 +33,22 @@ public class SocioService {
 
 
     public String eliminarPorId(Integer id) {
+        // Buscar el socio por ID
         Socio socio = socioRepositorio.findById(id).orElse(null);
 
+        // Verificar si el socio existe
         if (socio == null) {
             return "Socio no encontrado";
         }
 
+        // Verificar si el socio tiene un abono vigente
+        List<AbonoSocio> abonos = socio.getAbonoSocios();
+        if (abonos != null && abonos.stream().anyMatch(abono -> abono.getFechaFin().isAfter(LocalDate.now()))) {
+            return "El socio no puede ser eliminado porque tiene un abono vigente.";
+        }
+
         try {
+            // Eliminar el socio si no tiene abonos vigentes
             socioRepositorio.delete(socio);
             return "Socio eliminado";
         } catch (Exception e) {
@@ -118,5 +127,31 @@ public class SocioService {
     }
 
 
+    public String totalGasto(Integer socioId) {
+        Socio socio = socioRepositorio.findById(socioId).orElse(null);
 
+        if (socio == null) {
+            return "Socio no encontrado con ID: " + socioId;
+        }
+
+        List<AbonoSocio> abonos = socio.getAbonoSocios();
+        if (abonos == null || abonos.isEmpty()) {
+            return "El socio no tiene abonos registrados.";
+        }
+
+        double totalGasto = abonos.stream().mapToDouble(AbonoSocio::getPrecio).sum();
+
+        // Crear un StringBuilder para construir la respuesta
+        StringBuilder sb = new StringBuilder();
+        sb.append("El socio con ID ").append(socioId).append(" ha gastado un total de ")
+                .append(totalGasto).append("€ en abonos.\n");
+
+        // Añadir la lista de abonos
+        sb.append("Lista de abonos:\n");
+        for (AbonoSocio abono : abonos) {
+            sb.append(abono.getAbono().getNombre()).append(": Precio: ").append(abono.getPrecio()).append("€").append(" , Fecha: ").append(abono.getFechaInicio()).append("\n");
+        }
+
+        return sb.toString();
+    }
 }

@@ -152,27 +152,23 @@ public class AbonoService {
             List<AbonoSocio> abonosPrevios = socio.getAbonoSocios();
 
             if (abonosPrevios == null || abonosPrevios.isEmpty()) {
-                // Si el socio no tiene abonos previos, mostrar mensaje
-                System.out.println("El socio no tiene abonos previos.");
-                return null;
+                // Si el socio no tiene abonos previos, retornar null
+                return null; // Esto lo manejaremos en el controlador
             }
 
             // Obtener el último abono del socio
-            AbonoSocio abonoVigente = abonosPrevios.getLast();
+            AbonoSocio abonoVigente = abonosPrevios.get(abonosPrevios.size() - 1); // Acceso por índice al último elemento
 
             // Determinar si el abono ha caducado
             LocalDate fechaInicio;
             if (abonoVigente.getFechaFin().isBefore(LocalDate.now())) {
-                // El abono ha caducado, renovarlo con la fecha de hoy
-                System.out.println("El abono ha caducado. Se renueva con fecha de hoy.");
                 fechaInicio = LocalDate.now();
             } else {
-                // Si el abono aún es vigente, renovarlo desde la fecha de finalización del abono vigente
                 fechaInicio = abonoVigente.getFechaFin();
             }
 
             // Obtener el abono asociado
-            Abono abono = abonoVigente.getAbono(); // Se renueva con el mismo abono del último
+            Abono abono = abonoVigente.getAbono();
 
             // Calcular la nueva fecha de fin
             LocalDate nuevaFechaFin = fechaInicio.plusDays(abono.getDuracion());
@@ -186,15 +182,16 @@ public class AbonoService {
             nuevoAbonoSocio.setPrecio(abono.getPrecio());
 
             // Guardar el nuevo AbonoSocio
-            return abonoSocioService.guardar(nuevoAbonoSocio);
-
+            return abonoSocioService.guardar(nuevoAbonoSocio); // Retornar el nuevo abono
         } catch (Exception e) {
-            // Manejar los errores y mostrarlos en consola
-            System.out.println("Error al renovar el abono: " + e.getMessage());
             return null;
         }
     }
 
-
-
 }
+
+
+
+
+
+
