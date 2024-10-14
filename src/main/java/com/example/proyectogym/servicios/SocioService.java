@@ -138,10 +138,8 @@ public class SocioService {
         if (abonos == null || abonos.isEmpty()) {
             return "El socio no tiene abonos registrados.";
         }
-
         double totalGasto = abonos.stream().mapToDouble(AbonoSocio::getPrecio).sum();
 
-        // Crear un StringBuilder para construir la respuesta
         StringBuilder sb = new StringBuilder();
         sb.append("El socio con ID ").append(socioId).append(" ha gastado un total de ")
                 .append(totalGasto).append("€ en abonos.\n");
