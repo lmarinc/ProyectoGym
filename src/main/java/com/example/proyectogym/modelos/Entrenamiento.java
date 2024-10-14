@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "entrenamiento",schema = "gym", catalog = "postgres")
@@ -42,5 +44,11 @@ public class Entrenamiento {
     @ManyToOne()
     @JoinColumn(name = "id_monitor", nullable = false)
     private Monitor monitor;
+
+    @OneToMany(mappedBy = "entrenamiento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SocioEntrenamiento> socioEntrenamientos = new ArrayList<>();
+
+
 }
 

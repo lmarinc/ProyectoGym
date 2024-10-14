@@ -1,10 +1,12 @@
 -- Eliminación de tablas si existen
+DROP TABLE IF EXISTS Socio_Entrenamiento;
 DROP TABLE IF EXISTS Entrenamiento;
 DROP TABLE IF EXISTS Asistencia;
 DROP TABLE IF EXISTS AbonoSocio;
 DROP TABLE IF EXISTS Monitor;
 DROP TABLE IF EXISTS Abono;
 DROP TABLE IF EXISTS Socio;
+
 
 -- Creación de la tabla Socio
 CREATE TABLE IF NOT EXISTS Socio (
@@ -70,6 +72,13 @@ CREATE TABLE IF NOT EXISTS Entrenamiento (
     fecha_fin TIMESTAMP(6) NOT NULL,
     id_monitor INT NOT NULL,
     CONSTRAINT fk_entrenamiento_monitor FOREIGN KEY (id_monitor) REFERENCES Monitor(id)
+);
+CREATE TABLE IF NOT EXISTS Socio_Entrenamiento (
+    id SERIAL PRIMARY KEY,
+    id_socio INT NOT NULL,
+    id_entrenamiento INT NOT NULL,
+    CONSTRAINT fk_socio_entrenamiento_socio FOREIGN KEY (id_socio) REFERENCES Socio(id),
+    CONSTRAINT fk_socio_entrenamiento_entrenamiento FOREIGN KEY (id_entrenamiento) REFERENCES Entrenamiento(id)
 );
 
 

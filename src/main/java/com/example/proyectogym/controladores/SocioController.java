@@ -2,6 +2,7 @@ package com.example.proyectogym.controladores;
 
 
 import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
+import com.example.proyectogym.dto.RenovarAbonoVigenteDTO;
 import com.example.proyectogym.dto.SocioAbonoDTO;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.AbonoSocio;
@@ -68,6 +69,12 @@ public class SocioController {
     public Socio guardarSocioConAbono(@RequestBody SocioAbonoDTO dto) {
         return socioService.guardarSocioConAbono(dto);
     }
+
+    @PostMapping("/abono/renovar")
+    public AbonoSocio renovarAbono(@RequestBody RenovarAbonoVigenteDTO dto) {
+        return abonoService.renovarAbonoVigente(dto);
+    }
+
 
 
 

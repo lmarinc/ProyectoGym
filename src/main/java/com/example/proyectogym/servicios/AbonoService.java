@@ -2,6 +2,7 @@ package com.example.proyectogym.servicios;
 
 
 import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
+import com.example.proyectogym.dto.RenovarAbonoVigenteDTO;
 import com.example.proyectogym.enumerados.TipoAbono;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.Abono;
@@ -114,7 +115,7 @@ public class AbonoService {
 
         if (abonosPrevios == null || abonosPrevios.isEmpty()) {
             // Si no hay registros previos, usar la fecha de hoy
-            fechaInicio = LocalDate.now();
+            throw new IllegalArgumentException("El socio no tiene abonos previos");
         } else {
             // Si hay registros previos, tomar la fecha de fin del último registro
             LocalDate fechaFinUltimo = abonosPrevios.get(abonosPrevios.size() - 1).getFechaFin();
@@ -134,6 +135,64 @@ public class AbonoService {
 
         // Guardar el nuevo AbonoSocio
         return abonoSocioService.guardar(nuevoAbonoSocio);
+    }
+
+    /**
+     * Método para renovar un abono vigente
+     * @param dto
+     * @return
+     */
+    public AbonoSocio renovarAbonoVigente(RenovarAbonoVigenteDTO dto) {
+        try {
+            // Obtener el socio por ID
+            Socio socio = socioRepositorio.findById(dto.getIdSocio())
+                    .orElseThrow(() -> new Exception("Socio no encontrado con ID: " + dto.getIdSocio()));
+
+            // Obtener los abonos previos del socio
+            List<AbonoSocio> abonosPrevios = socio.getAbonoSocios();
+
+            if (abonosPrevios == null || abonosPrevios.isEmpty()) {
+                // Si el socio no tiene abonos previos, mostrar mensaje
+                System.out.println("El socio no tiene abonos previos.");
+                return null;
+            }
+
+            // Obtener el último abono del socio
+            AbonoSocio abonoVigente = abonosPrevios.getLast();
+
+            // Determinar si el abono ha caducado
+            LocalDate fechaInicio;
+            if (abonoVigente.getFechaFin().isBefore(LocalDate.now())) {
+                // El abono ha caducado, renovarlo con la fecha de hoy
+                System.out.println("El abono ha caducado. Se renueva con fecha de hoy.");
+                fechaInicio = LocalDate.now();
+            } else {
+                // Si el abono aún es vigente, renovarlo desde la fecha de finalización del abono vigente
+                fechaInicio = abonoVigente.getFechaFin();
+            }
+
+            // Obtener el abono asociado
+            Abono abono = abonoVigente.getAbono(); // Se renueva con el mismo abono del último
+
+            // Calcular la nueva fecha de fin
+            LocalDate nuevaFechaFin = fechaInicio.plusDays(abono.getDuracion());
+
+            // Crear el nuevo registro de AbonoSocio
+            AbonoSocio nuevoAbonoSocio = new AbonoSocio();
+            nuevoAbonoSocio.setSocio(socio);
+            nuevoAbonoSocio.setAbono(abono);
+            nuevoAbonoSocio.setFechaInicio(fechaInicio);
+            nuevoAbonoSocio.setFechaFin(nuevaFechaFin);
+            nuevoAbonoSocio.setPrecio(abono.getPrecio());
+
+            // Guardar el nuevo AbonoSocio
+            return abonoSocioService.guardar(nuevoAbonoSocio);
+
+        } catch (Exception e) {
+            // Manejar los errores y mostrarlos en consola
+            System.out.println("Error al renovar el abono: " + e.getMessage());
+            return null;
+        }
     }
 
 

@@ -49,4 +49,8 @@ public class Socio {
         @JsonManagedReference
         @JsonIgnore
         private List<Asistencia> asistencias;
+
+        @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JsonIgnore
+        private List<SocioEntrenamiento> socioEntrenamientos = new ArrayList<>();
 }
