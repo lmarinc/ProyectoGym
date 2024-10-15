@@ -1,5 +1,6 @@
 package com.example.proyectogym.servicios;
 
+import com.example.proyectogym.dto.MensajeDTO;
 import com.example.proyectogym.dto.SocioAbonoDTO;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.AbonoSocio;
@@ -31,28 +32,25 @@ public class SocioService {
     }
 
 
-
-    public String eliminarPorId(Integer id) {
-        // Buscar el socio por ID
+    /**
+     * Método para eliminar un socio por su id
+     * @param id
+     * @return
+     */
+    public MensajeDTO eliminarPorId(Integer id) {
         Socio socio = socioRepositorio.findById(id).orElse(null);
-
-        // Verificar si el socio existe
         if (socio == null) {
-            return "Socio no encontrado";
+            return new MensajeDTO("Socio no encontrado");
         }
-
-        // Verificar si el socio tiene un abono vigente
-        List<AbonoSocio> abonos = socio.getAbonoSocios();
-        if (abonos != null && abonos.stream().anyMatch(abono -> abono.getFechaFin().isAfter(LocalDate.now()))) {
-            return "El socio no puede ser eliminado porque tiene un abono vigente.";
+        if (abonoSocioRepositorio.existsBySocioIdAndFechaFinAfter(id, LocalDate.now())) {
+            return new MensajeDTO("El socio no puede ser eliminado porque tiene un abono vigente.");
         }
 
         try {
-            // Eliminar el socio si no tiene abonos vigentes
             socioRepositorio.delete(socio);
-            return "Socio eliminado";
+            return new MensajeDTO("Socio eliminado");
         } catch (Exception e) {
-            return "Error al eliminar el socio";
+            return new MensajeDTO("Error al eliminar el socio: " + e.getMessage());
         }
     }
 
@@ -92,64 +90,53 @@ public class SocioService {
      * @return
      */
     public Socio guardarSocioConAbono(SocioAbonoDTO dto) {
-        // Crear un nuevo Socio y asignar los valores del DTO
+
         Socio socio = new Socio();
         socio.setNombre(dto.getNombre());
         socio.setApellidos(dto.getApellidos());
         socio.setDni(dto.getDni());
         socio.setTelefono(dto.getTelefono());
         socio.setCorreo(dto.getCorreo());
-        socio.setEsActivo(true);  // Establecer esActivo a true por defecto
+        socio.setEsActivo(true);
 
-        // Buscar el Abono por su ID
+
         Abono abono = abonoRepository.findById(dto.getAbonoId())
                 .orElseThrow(() -> new IllegalArgumentException("Abono no encontrado con id: " + dto.getAbonoId()));
 
-        // Parsear la fecha de inicio
+
         LocalDate fechaInicioParsed = LocalDate.parse(dto.getFechaInicio());
 
-        // Calcular la fecha de fin en base a la duración del abono
+
         LocalDate fechaFin = fechaInicioParsed.plusDays(abono.getDuracion());
 
-        // Crear el registro en AbonoSocio
+
         AbonoSocio abonoSocio = new AbonoSocio();
-        abonoSocio.setSocio(socio);  // Asociar el socio al abono
+        abonoSocio.setSocio(socio);
         abonoSocio.setAbono(abono);
         abonoSocio.setFechaInicio(fechaInicioParsed);
         abonoSocio.setFechaFin(fechaFin);
         abonoSocio.setPrecio(dto.getPrecio());
 
-        // Añadir el AbonoSocio al socio sin exponerlo en el JSON de entrada
+
         socio.getAbonoSocios().add(abonoSocio);
 
-        // Guardar el socio (en cascada se guarda el AbonoSocio)
+
         return socioRepositorio.save(socio);
     }
 
 
-    public String totalGasto(Integer socioId) {
+    public MensajeDTO totalGasto(Integer socioId) {
         Socio socio = socioRepositorio.findById(socioId).orElse(null);
 
         if (socio == null) {
-            return "Socio no encontrado con ID: " + socioId;
+            return new MensajeDTO("Socio no encontrado con ID: " + socioId);
+        }
+        Double totalGasto = abonoSocioRepositorio.obtenerTotalGastoPorSocio(socioId);
+
+        if (totalGasto == null || totalGasto == 0) {
+            return new MensajeDTO("El socio no tiene abonos registrados.");
         }
 
-        List<AbonoSocio> abonos = socio.getAbonoSocios();
-        if (abonos == null || abonos.isEmpty()) {
-            return "El socio no tiene abonos registrados.";
-        }
-        double totalGasto = abonos.stream().mapToDouble(AbonoSocio::getPrecio).sum();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("El socio con ID ").append(socioId).append(" ha gastado un total de ")
-                .append(totalGasto).append("€ en abonos.\n");
-
-        // Añadir la lista de abonos
-        sb.append("Lista de abonos:\n");
-        for (AbonoSocio abono : abonos) {
-            sb.append(abono.getAbono().getNombre()).append(": Precio: ").append(abono.getPrecio()).append("€").append(" , Fecha: ").append(abono.getFechaInicio()).append("\n");
-        }
-
-        return sb.toString();
+        return new MensajeDTO("El socio con ID " + socioId + " ha gastado un total de " + totalGasto + "€ en abonos.");
     }
 }

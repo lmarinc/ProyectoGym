@@ -17,4 +17,6 @@ public interface SocioRepositorio extends JpaRepository<Socio,Integer> {
      * @return
      */
     List<Socio> findAllByDniEquals(String dni);
+
+
 }

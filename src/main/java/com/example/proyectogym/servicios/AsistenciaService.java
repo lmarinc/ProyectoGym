@@ -1,6 +1,7 @@
 package com.example.proyectogym.servicios;
 
 import com.example.proyectogym.dto.AsistenciaDto;
+import com.example.proyectogym.dto.MensajeDTO;
 import com.example.proyectogym.modelos.Asistencia;
 import com.example.proyectogym.modelos.Socio;
 import com.example.proyectogym.repositorios.AsistenciaRepositorio;
@@ -50,7 +51,6 @@ public class AsistenciaService {
     public String entradaAsistencia(AsistenciaDto asistenciaDto) {
         Integer socioId = asistenciaDto.getSocioId();
 
-        // Verificar si ya existe una entrada sin salida para el socio
         if (asistenciaRepositorio.existsBySocioIdAndHoraSalidaIsNull(socioId)) {
             return "El socio con ID " + socioId + " ya tiene una entrada sin salida registrada.";
         }
@@ -96,45 +96,28 @@ public class AsistenciaService {
         }
     }
 
-    public String totalAsistencia(AsistenciaDto asistenciaDto) {
-        Integer socioId = asistenciaDto.getSocioId();  // Extraer el socioId desde AsistenciaDto
+    public MensajeDTO totalAsistencia(AsistenciaDto asistenciaDto) {
+        Integer socioId = asistenciaDto.getSocioId();
 
         try {
-            // Obtener todas las asistencias del socio con entradas y salidas completadas
-            List<Asistencia> asistencias = asistenciaRepositorio.findBySocioIdAndHoraSalidaIsNotNull(socioId);
+            int totalDias = asistenciaRepositorio.obtenerTotalDiasAsistencia(socioId);
 
-            // Si no hay asistencias registradas
-            if (asistencias == null || asistencias.isEmpty()) {
-                return "El socio con ID " + socioId + " no tiene asistencias registradas.";
+            Integer totalHoras = asistenciaRepositorio.obtenerTotalHorasAsistencia(socioId);
+
+            if (totalDias == 0 || totalHoras == null) {
+                return new MensajeDTO("El socio con ID " + socioId + " no tiene asistencias registradas.");
             }
 
-            // Set para contar los días únicos de asistencia
-            Set<LocalDate> diasAsistidos = new HashSet<>();
-            int totalHoras = 0;  // Cambiar a Integer para el total de horas
+            String mensaje = "El socio con ID " + socioId + " ha asistido un total de " + totalDias + " días, acumulando " + totalHoras + " horas en el gimnasio.";
 
-            // Recorrer cada asistencia y calcular el tiempo total y los días únicos
-            for (Asistencia asistencia : asistencias) {
-                // Agregar la fecha de asistencia al Set para contar días únicos
-                diasAsistidos.add(asistencia.getFecha());
-
-                // Calcular la duración en horas de cada asistencia
-                if (asistencia.getHoraEntrada() != null && asistencia.getHoraSalida() != null) {
-                    // Obtener la diferencia en milisegundos entre la hora de salida y la hora de entrada
-                    long duracionMilisegundos = asistencia.getHoraSalida().getTime() - asistencia.getHoraEntrada().getTime();
-                    // Convertir la duración de milisegundos a horas, redondeando hacia abajo
-                    int duracionHoras = (int) TimeUnit.MILLISECONDS.toHours(duracionMilisegundos);
-                    totalHoras += duracionHoras;
-                }
-            }
-
-            // Total de días y horas asistidos
-            int totalDias = diasAsistidos.size();
-
-            return "El socio con ID " + socioId + " ha asistido un total de " + totalDias + " días, acumulando " + totalHoras + " horas en el gimnasio.";
+            return new MensajeDTO(mensaje);
         } catch (Exception e) {
-            return "Error al calcular la asistencia: " + e.getMessage();
+            String mensajeError = "Error al calcular la asistencia: " + e.getMessage();
+            return new MensajeDTO(mensajeError);
         }
     }
 
-
 }
+
+
+

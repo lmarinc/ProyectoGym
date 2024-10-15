@@ -13,14 +13,6 @@ import java.util.Optional;
 @Repository
 public interface AsistenciaRepositorio extends JpaRepository<Asistencia,Integer> {
 
-    /**
-     * Metodo para encontrar la ultima asistencia de un socio
-     * @param socio
-     * @return
-     */
-    @Query("SELECT a FROM Asistencia a WHERE a.socio = :socio ORDER BY a.fecha DESC")
-    Optional<Asistencia> findLatestAsistenciaBySocio(@Param("socio") Socio socio);
-
 
     /**
      * Metodo para encontrar la ultima entrada sin salida de un socio
@@ -30,7 +22,33 @@ public interface AsistenciaRepositorio extends JpaRepository<Asistencia,Integer>
     @Query("SELECT a FROM Asistencia a WHERE a.socio.id = :socioId AND a.horaSalida IS NULL ORDER BY a.fecha DESC, a.horaEntrada DESC")
     Asistencia findLastEntradaWithoutSalida(@Param("socioId") Integer socioId);
 
-    boolean existsBySocioIdAndHoraSalidaIsNull(Integer socioId);
+    /**
+     * Metodo para encontrar la ultima entrada de un socio
+     * @param socioId
+     * @return
+     */
+        boolean existsBySocioIdAndHoraSalidaIsNull(Integer socioId);
 
+    /**
+     * Metodo para encontrar todas las asistencias de un socio
+     * @param socioId
+     * @return
+     */
     List<Asistencia> findBySocioIdAndHoraSalidaIsNotNull(Integer socioId);
+
+    /**
+     * Metodo para encontrar todas las asistencias de un socio
+     * @param socioId
+     * @return
+     */
+    @Query("SELECT COUNT(DISTINCT a.fecha) FROM Asistencia a WHERE a.socio.id = :socioId AND a.horaSalida IS NOT NULL")
+    int obtenerTotalDiasAsistencia(@Param("socioId") Integer socioId);
+
+    /**
+     * Metodo para obtener el total de horas de asistencia de un socio
+     * @param socioId
+     * @return
+     */
+    @Query("SELECT SUM(TIMESTAMPDIFF(HOUR, a.horaEntrada, a.horaSalida)) FROM Asistencia a WHERE a.socio.id = :socioId AND a.horaEntrada IS NOT NULL AND a.horaSalida IS NOT NULL")
+    Integer obtenerTotalHorasAsistencia(@Param("socioId") Integer socioId);
 }

@@ -1,10 +1,7 @@
 package com.example.proyectogym.controladores;
 
 
-import com.example.proyectogym.dto.AsistenciaDto;
-import com.example.proyectogym.dto.RenovarAbonoSocioDTO;
-import com.example.proyectogym.dto.RenovarAbonoVigenteDTO;
-import com.example.proyectogym.dto.SocioAbonoDTO;
+import com.example.proyectogym.dto.*;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.AbonoSocio;
 import com.example.proyectogym.modelos.Socio;
@@ -66,7 +63,7 @@ public class SocioController {
     }
 
     @DeleteMapping("/eliminar")
-    public String eliminar(@RequestParam Integer id) {
+    public MensajeDTO eliminar(@RequestParam Integer id) {
         return socioService.eliminarPorId(id);
     }
 
@@ -76,32 +73,25 @@ public class SocioController {
     }
 
     @PostMapping("/abono/renovar")
-    public Object renovarAbono(@RequestParam Integer idSocio) {
-        // Crear el DTO a partir del parámetro
+    public MensajeAbonoSocioDTO renovarAbono(@RequestParam Integer idSocio) {
         RenovarAbonoVigenteDTO dto = new RenovarAbonoVigenteDTO();
         dto.setIdSocio(idSocio);
 
-        AbonoSocio nuevoAbonoSocio = abonoService.renovarAbonoVigente(dto);
+        MensajeAbonoSocioDTO response = abonoService.renovarAbonoVigente(dto);
 
-        if (nuevoAbonoSocio == null) {
-            // Retornar un mensaje de error como String
-            return "Error: El socio con ID " + idSocio + " no tiene abonos previos o no se pudo renovar el abono.";
-        }
-
-        // Si el abono fue renovado correctamente, retornamos el objeto AbonoSocio
-        return nuevoAbonoSocio;
+        return response;
     }
 
 
     @GetMapping("/asistencia")
-    public String registrarAsistencia(@RequestParam Integer socioId) {
+    public MensajeDTO registrarAsistencia(@RequestParam Integer socioId) {
         AsistenciaDto dto = new AsistenciaDto();
         dto.setSocioId(socioId);
         return asistenciaService.totalAsistencia(dto);
     }
 
     @GetMapping("gasto")
-    public String totalGasto(@RequestParam Integer socioId) {
+    public MensajeDTO totalGasto(@RequestParam Integer socioId) {
         return socioService.totalGasto(socioId);
     }
 
