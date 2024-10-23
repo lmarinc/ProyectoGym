@@ -1,4 +1,5 @@
 -- Eliminación de tablas si existen
+DROP TABLE IF EXISTS Usuario;
 DROP TABLE IF EXISTS Socio_Entrenamiento;
 DROP TABLE IF EXISTS Entrenamiento;
 DROP TABLE IF EXISTS Asistencia;
@@ -80,6 +81,24 @@ CREATE TABLE IF NOT EXISTS Socio_Entrenamiento (
     CONSTRAINT fk_socio_entrenamiento_socio FOREIGN KEY (id_socio) REFERENCES Socio(id),
     CONSTRAINT fk_socio_entrenamiento_entrenamiento FOREIGN KEY (id_entrenamiento) REFERENCES Entrenamiento(id)
 );
+
+CREATE TABLE if not exists usuario (
+                         id SERIAL PRIMARY KEY,
+                         username VARCHAR(500) NOT NULL UNIQUE,
+                         password VARCHAR(500) NOT NULL,
+                         rol INT NOT NULL
+);
+
+
+ALTER TABLE socio
+    ADD COLUMN id_usuario INT NULL,
+    ADD CONSTRAINT fk_socio_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id);
+
+ALTER TABLE monitor
+    ADD COLUMN id_usuario INT NULL,
+    ADD CONSTRAINT fk_monitor_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id);
+
+
 
 
 INSERT INTO Socio (id, nombre, apellidos, dni, telefono, correo, es_activo) VALUES
