@@ -1,11 +1,14 @@
 package com.example.proyectogym.repositorios;
 
+
 import com.example.proyectogym.modelos.Usuario;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UsuarioRepositorio extends UserDetailsService {
-
+@Repository
+public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByUsername(String username);
 }
+

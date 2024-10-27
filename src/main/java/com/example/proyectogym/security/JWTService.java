@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private static final String secretKey = "DJoHzwXFCmR8ZfgRenV3cyjtUuoAXdXg";
+    private static final String secretKey = "qwertyuiopasdfghjklzxcvbnm12345678";
 
     /**
      * Método para generar token de acceso a través de los datos
@@ -73,8 +74,8 @@ public class JWTService {
         return new Date(extractTokenData(token).getFecha_expiracion()).before(new Date()) ;
     }
 
-    private Key getSignInKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private Key getSignInKey() {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8); // Usar la clave secreta como bytes
+        return Keys.hmacShaKeyFor(keyBytes); // Genera la clave para HMAC
     }
 }
