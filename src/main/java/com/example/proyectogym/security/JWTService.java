@@ -75,7 +75,7 @@ public class JWTService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8); // Usar la clave secreta como bytes
-        return Keys.hmacShaKeyFor(keyBytes); // Genera la clave para HMAC
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
