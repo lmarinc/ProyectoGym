@@ -97,7 +97,14 @@ public class AsistenciaService {
     }
 
     public MensajeDTO totalAsistencia(AsistenciaDto asistenciaDto) {
+
+
         Integer socioId = asistenciaDto.getSocioId();
+
+        Socio socio = socioRepositorio.findById(socioId).orElse(null);
+        if (socio == null) {
+            return new MensajeDTO("El socio con ID " + socioId + " no existe.");
+        }
 
         try {
             int totalDias = asistenciaRepositorio.obtenerTotalDiasAsistencia(socioId);

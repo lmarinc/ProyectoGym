@@ -31,7 +31,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/abono/**").hasAnyAuthority(Rol.USUARIO.name())// Verifica que estos roles sean correctos
+                        .requestMatchers("/abono/**").hasAnyAuthority(Rol.USUARIO.name())//
+                        .requestMatchers("/socio/**").hasAnyAuthority(Rol.USUARIO.name())//
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
