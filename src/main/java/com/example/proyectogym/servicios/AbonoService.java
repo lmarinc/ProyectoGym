@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,8 +67,17 @@ public class AbonoService {
      * Método que devuelve una lista de todos los abonos
      * @return
      */
-    public List<Abono> getAll(){
-        return abonoRepositorio.findAll();
+    public List<Abono> getAll() {
+        try {
+            List<Abono> abonos = abonoRepositorio.findAll();
+            if (abonos.isEmpty()) {
+                throw new Exception("La lista de abonos está vacía.");
+            }
+            return abonos;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     /**

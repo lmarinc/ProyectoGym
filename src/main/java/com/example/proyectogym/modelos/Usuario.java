@@ -14,7 +14,8 @@ import java.util.Collections;
 import lombok.*;
 
 @Entity
-@Table(name = "usuario", schema = "gym", catalog = "postgres")
+//@Table(name = "usuario", schema = "gym", catalog = "postgres")
+@Table(name = "usuario", schema = "gym")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -94,6 +94,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>3.1.0</version> <!-- Usa la versión más reciente si es posible -->
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>

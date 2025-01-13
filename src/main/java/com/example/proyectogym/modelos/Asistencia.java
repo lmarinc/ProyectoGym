@@ -8,7 +8,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "asistencia",schema = "gym", catalog = "postgres")
+//@Table(name = "asistencia",schema = "gym", catalog = "postgres")
+@Table(name = "asistencia",schema = "gym")
 @Getter
 @Setter
 @ToString (exclude = {"socio"})

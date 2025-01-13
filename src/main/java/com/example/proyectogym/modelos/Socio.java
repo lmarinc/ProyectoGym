@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "socio",schema = "gym", catalog = "postgres")
+//@Table(name = "socio",schema = "gym", catalog = "postgres")
+@Table(name = "socio",schema = "gym")
 @Getter
 @Setter
 @ToString

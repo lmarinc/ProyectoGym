@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "monitor",schema = "gym", catalog = "postgres")
+//@Table(name = "monitor",schema = "gym", catalog = "postgres")
+@Table(name = "monitor",schema = "gym")
 @Getter
 @Setter
 @ToString

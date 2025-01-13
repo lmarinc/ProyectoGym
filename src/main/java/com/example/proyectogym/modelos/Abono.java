@@ -7,7 +7,8 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "abono",schema = "gym", catalog = "postgres")
+//@Table(name = "abono",schema = "gym", catalog = "postgres")
+@Table(name = "abono",schema = "gym")
 @Getter
 @Setter
 @ToString

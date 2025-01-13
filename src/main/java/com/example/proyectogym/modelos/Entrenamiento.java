@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "entrenamiento",schema = "gym", catalog = "postgres")
+//@Table(name = "entrenamiento",schema = "gym", catalog = "postgres")
+@Table(name = "entrenamiento",schema = "gym")
 @Getter
 @Setter
 @ToString (exclude = {"monitor"})
