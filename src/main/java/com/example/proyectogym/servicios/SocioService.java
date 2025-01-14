@@ -61,6 +61,21 @@ public class SocioService {
      */
 
     public Socio guardar(Socio socio) {
+        if (socio.getNombre() == null || socio.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar en blanco.");
+        }
+        if (socio.getApellidos() == null || socio.getApellidos().trim().isEmpty()) {
+            throw new IllegalArgumentException("Los apellidos no pueden estar en blanco.");
+        }
+        if (socio.getDni() == null || socio.getDni().trim().isEmpty()) {
+            throw new IllegalArgumentException("El DNI no puede estar en blanco.");
+        }
+        if (socio.getTelefono() == null || socio.getTelefono().trim().isEmpty()) {
+            throw new IllegalArgumentException("El teléfono no puede estar en blanco.");
+        }
+        if (socio.getCorreo() == null || socio.getCorreo().trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo no puede estar en blanco.");
+        }
         return socioRepositorio.save(socio);
     }
 

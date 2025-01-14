@@ -51,6 +51,10 @@ public class AbonoService {
      */
     public Abono getAbonoPorId(Integer id){
         Abono abono = abonoRepositorio.findById(id).orElse(null);
+
+        if(abono == null){
+            throw new IllegalArgumentException("Abono no encontrado con ID: " + id);
+        }
         return abono;
 
     }

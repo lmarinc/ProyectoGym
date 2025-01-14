@@ -1,5 +1,6 @@
 package com.example.proyectogym.servicios;
 
+import com.example.proyectogym.dto.*;
 import com.example.proyectogym.enumerados.TipoAbono;
 import com.example.proyectogym.modelos.Abono;
 import com.example.proyectogym.modelos.AbonoSocio;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Transactional
-public class EntregaTest {
+public class zEntregaTest {
 
     @Autowired
     private AbonoService abonoService;
@@ -51,24 +52,28 @@ public class EntregaTest {
         abono1.setNombre("Abono Mensual");
         abono1.setPrecio(50.0);
         abono1.setTipoAbono(TipoAbono.MENSUAL);
+        abono1.setDuracion(30);
         abonoRepositorio.save(abono1);
 
         Abono abono2 = new Abono();
         abono2.setNombre("Abono Trimestral");
         abono2.setPrecio(120.0);
         abono2.setTipoAbono(TipoAbono.TRIMESTRAL);
+        abono2.setDuracion(90);
         abonoRepositorio.save(abono2);
 
         Abono abono3 = new Abono();
         abono3.setNombre("Abono Anual");
         abono3.setPrecio(400.0);
         abono3.setTipoAbono(TipoAbono.ANUAL);
+        abono3.setDuracion(365);
         abonoRepositorio.save(abono3);
 
         Abono abono4 = new Abono();
         abono4.setNombre("Abono Semestral");
         abono4.setPrecio(200.0);
         abono4.setTipoAbono(TipoAbono.SEMESTRAL);
+        abono4.setDuracion(180);
         abonoRepositorio.save(abono4);
 
         //Crear Socio
@@ -100,7 +105,7 @@ public class EntregaTest {
         abonoSocioService.guardar(abonoSocio);
 
         AbonoSocio abonoSocio2 = new AbonoSocio();
-        abonoSocio2.setSocio(socio2);
+        abonoSocio2.setSocio(socio);
         abonoSocio2.setAbono(abono1);
         abonoSocio2.setFechaInicio(LocalDate.now());
         abonoSocio2.setFechaFin(LocalDate.now().plusMonths(1));
@@ -149,8 +154,152 @@ public class EntregaTest {
     }
 
     @Test
-    public void testTotalAsistenciaPositivo(){
+    public void testTotalAsistenciaPositivo() {
+        // GIVEN
+        AsistenciaDto asistenciaDto = new AsistenciaDto();
+        asistenciaDto.setSocioId(1);
 
+        // WHEN
+        MensajeDTO mensajeDTO = asistenciaService.totalAsistencia(asistenciaDto);
+
+        // THEN
+        assertNotNull(mensajeDTO);
+        assertEquals("El socio con ID 1 ha asistido un total de 2 días, acumulando 2 horas en el gimnasio.", mensajeDTO.getMensaje());
+    }
+    @Test
+    public void testTotalAsistenciaNegativo() {
+        // GIVEN
+        AsistenciaDto asistenciaDto = new AsistenciaDto();
+        asistenciaDto.setSocioId(3);
+
+        // WHEN
+        MensajeDTO mensajeDTO = asistenciaService.totalAsistencia(asistenciaDto);
+
+        // THEN
+        assertNotNull(mensajeDTO);
+        assertEquals("El socio con ID 3 no existe.", mensajeDTO.getMensaje());
+    }
+
+    @Test
+    public void testImporteGastadoPositivo() {
+        // GIVEN
+        Integer socioId = 1;
+
+        // WHEN
+        MensajeDTO mensajeDTO = socioService.totalGasto(socioId);
+
+        // THEN
+        assertNotNull(mensajeDTO);
+        assertEquals("El socio con ID 1 ha gastado un total de 100.0€ en abonos.", mensajeDTO.getMensaje());
+    }
+
+    @Test
+    public void testImporteGastadoNegativo(){
+        // GIVEN
+        Integer socioId = 2;
+
+        // WHEN
+        MensajeDTO mensajeDTO = socioService.totalGasto(socioId);
+
+        // THEN
+        assertNotNull(mensajeDTO);
+        assertEquals("El socio no tiene abonos registrados.", mensajeDTO.getMensaje());
+    }
+
+    @Test
+    public void testRenovarAbonoPositivo(){
+        // Given
+        RenovarAbonoVigenteDTO dto = new RenovarAbonoVigenteDTO();
+        dto.setIdSocio(1);
+
+        //When
+        MensajeAbonoSocioDTO mensajeAbonoSocioDTO = abonoService.renovarAbonoVigente(dto);
+
+        //Then
+        assertNotNull(mensajeAbonoSocioDTO);
+        assertEquals("Abono renovado exitosamente para Juan Pérez", mensajeAbonoSocioDTO.getMensaje());
+
+    }
+
+    @Test
+    public void testRenovarAbonoNegativo(){
+        // Given
+        RenovarAbonoVigenteDTO dto = new RenovarAbonoVigenteDTO();
+        dto.setIdSocio(2);
+
+        //When
+        MensajeAbonoSocioDTO mensajeAbonoSocioDTO = abonoService.renovarAbonoVigente(dto);
+
+        //Then
+        assertNotNull(mensajeAbonoSocioDTO);
+        assertEquals("El socio no tiene abonos previos.", mensajeAbonoSocioDTO.getMensaje());
+
+    }
+
+    @Test
+    public void testEditarSocioPositivo() {
+        // GIVEN
+        Socio socio = socioRepositorio.findById(1).orElse(null);
+        assertNotNull(socio);
+
+        socio.setNombre("Juan Editado");
+        socio.setApellidos("Pérez Editado");
+        socio.setTelefono("87654321");
+        socio.setCorreo("juaneditado@juan.es");
+
+        // WHEN
+        Socio socioActualizado = socioService.guardar(socio);
+
+        // THEN
+        assertNotNull(socioActualizado);
+        assertEquals("Juan Editado", socioActualizado.getNombre());
+        assertEquals("Pérez Editado", socioActualizado.getApellidos());
+        assertEquals("12345678", socioActualizado.getDni());
+        assertEquals("87654321", socioActualizado.getTelefono());
+        assertEquals("juaneditado@juan.es", socioActualizado.getCorreo());
+        assertTrue(socioActualizado.getEsActivo());
+    }
+    @Test
+    public void testEditarSocioNegativo() {
+        // GIVEN
+        Socio socio = socioRepositorio.findById(2).orElse(null);
+        assertNotNull(socio);
+
+        socio.setNombre("");
+
+        // WHEN & THEN
+        Exception exception = assertThrows(Exception.class, () -> {
+            socioService.guardar(socio);
+        });
+
+        assertEquals("El nombre no puede estar en blanco.", exception.getMessage());
+    }
+
+    @Test
+    public void testEliminarSocioPositivo(){
+        //Given
+        Integer idSocio = 2;
+
+        //When
+        MensajeDTO mensajeDTO = socioService.eliminarPorId(idSocio);
+
+        //Then
+        assertNotNull(mensajeDTO);
+        assertEquals("Socio eliminado", mensajeDTO.getMensaje());
+
+    }
+
+    @Test
+    public void testEliminarSocioNegativo(){
+        //Given
+        Integer idSocio = 1;
+
+        //When
+        MensajeDTO mensajeDTO = socioService.eliminarPorId(idSocio);
+
+        //Then
+        assertNotNull(mensajeDTO);
+        assertEquals("El socio no puede ser eliminado porque tiene un abono vigente.", mensajeDTO.getMensaje());
 
     }
 }
