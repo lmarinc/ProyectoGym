@@ -109,11 +109,63 @@ public class SocioServiceIntegracionTest {
 
     @Test
     public void testEditarSocioPositivo() {
+        // GIVEN
+        Integer socioId = 1;
+        Socio socio = new Socio();
+        socio.setId(socioId);
+        socio.setNombre("Juan");
+        socio.setApellidos("Pérez");
+        socio.setDni("12345678");
+        socio.setTelefono("12345678");
+        socio.setCorreo("juan@juan.es");
+        socio.setEsActivo(true);
 
+        socio.setNombre("Juan Editado");
+        socio.setApellidos("Pérez Editado");
+        socio.setTelefono("87654321");
+        socio.setCorreo("juaneditado@juan.es");
+
+        when(socioRepositorio.save(socio)).thenReturn(socio);
+
+        // WHEN
+        Socio socioActualizado = socioService.guardar(socio);
+
+        // THEN
+        assertNotNull(socioActualizado);
+        assertEquals("Juan Editado", socioActualizado.getNombre());
+        assertEquals("Pérez Editado", socioActualizado.getApellidos());
+        assertEquals("12345678", socioActualizado.getDni());
+        assertEquals("87654321", socioActualizado.getTelefono());
+        assertEquals("juaneditado@juan.es", socioActualizado.getCorreo());
+        assertTrue(socioActualizado.getEsActivo());
+
+        Mockito.verify(socioRepositorio, Mockito.times(1)).save(socio);
     }
 
     @Test
     public void testEliminarSocioPositivo() {
+        // Given
+        Integer idSocio = 2;
+        Socio socio = new Socio();
+        socio.setId(idSocio);
+        socio.setNombre("Felipe");
+        socio.setApellidos("Rodriguez");
+        socio.setDni("87654321");
+        socio.setTelefono("87654321");
+        socio.setCorreo("felipe@felipe.es");
+        socio.setEsActivo(true);
 
+        when(socioRepositorio.findById(idSocio)).thenReturn(Optional.of(socio));
+        when(abonoSocioRepositorio.existsBySocioIdAndFechaFinAfter(idSocio, LocalDate.now())).thenReturn(false);
+
+        // When
+        MensajeDTO mensajeDTO = socioService.eliminarPorId(idSocio);
+
+        // Then
+        assertNotNull(mensajeDTO);
+        assertEquals("Socio eliminado", mensajeDTO.getMensaje());
+        Mockito.verify(socioRepositorio, Mockito.times(1)).findById(idSocio);
+        Mockito.verify(abonoSocioRepositorio, Mockito.times(1)).existsBySocioIdAndFechaFinAfter(idSocio, LocalDate.now());
+        Mockito.verify(socioRepositorio, Mockito.times(1)).delete(socio);
     }
 }
